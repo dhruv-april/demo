@@ -4,11 +4,17 @@ const {
   deleteRecordSchema 
 } = require('../utils/schema');
 const { errorHelper } = require('../utils/helper');
+const { operationTypes } = require('../utils/constants');
 const Record = require('../models/record');
 
 const handleGetRecords = async (req, res) => {
-  const records = await Record.find();
-  res.status(200).json({ records });
+  try {
+    const records = await Record.find();
+    res.status(200).json({ records });
+  } catch(err) {
+    console.log('Something went wrong: ', err);
+    res.status(500).json({ message: err });
+  }
 }
 
 const handlePostRecords = async (req, res) => {
@@ -51,7 +57,7 @@ const handleCreateRecords = async (records) => {
       const { error } = createRecordSchema.validate(record);
       // if invalid schema then add errorMessage with name into failedRecords
       if(error) {
-        errorHelper(error.details[0].message, record['name'], "CREATE", failedRecords);
+        errorHelper(error.details[0].message, record['name'], operationTypes.CREATE, failedRecords);
       } 
       // else create new record
       else {
@@ -64,7 +70,7 @@ const handleCreateRecords = async (records) => {
   }
 
   return {
-    type: "CREATE",
+    type: operationTypes.CREATE,
     failedRecords: failedRecords,
     successRecords: successRecords,
   };
@@ -79,7 +85,7 @@ const handleUpdateRecords = async (records) => {
       const { error } = updateRecordSchema.validate(record);
       // if invalid schema then add errorMessage with id into failedRecords
       if(error) {
-        errorHelper(error.details[0].message, record['id'], "UPDATE", failedRecords);
+        errorHelper(error.details[0].message, record['id'], operationTypes.UPDATE, failedRecords);
       } else {
         const recordId = record['id'];
         delete record['id'];
@@ -94,7 +100,7 @@ const handleUpdateRecords = async (records) => {
         // if not then add errorMessage with id into failedRecords
         else {
           const errorMessage = 'Record does not exist to update.';
-          errorHelper(errorMessage, recordId, "UPDATE", failedRecords);
+          errorHelper(errorMessage, recordId, operationTypes.UPDATE, failedRecords);
         }
       }
     }
@@ -103,7 +109,7 @@ const handleUpdateRecords = async (records) => {
   }
   
   return {
-    type: "UPDATE",
+    type: operationTypes.UPDATE,
     failedRecords: failedRecords,
     successRecords: successRecords,
   };
@@ -118,7 +124,7 @@ const handleDeleteRecords = async (records) => {
       const { error } = deleteRecordSchema.validate(record);
       // if invalid schema then add errorMessage with id into failedRecords
       if(error) {
-        errorHelper(error.details[0].message, record['id'], "DELETE", failedRecords);
+        errorHelper(error.details[0].message, record['id'], operationTypes.DELETE, failedRecords);
       } else {
         // check if record exist into db to delete it
         const deletedRecord = await Record.findByIdAndDelete(record['id']);
@@ -128,7 +134,7 @@ const handleDeleteRecords = async (records) => {
         // if not then add errorMessage with id into failedRecords
         else {        
           const errorMessage = 'Record does not exist to delete.';
-          errorHelper(errorMessage, record['id'], "DELETE", failedRecords);
+          errorHelper(errorMessage, record['id'], operationTypes.DELETE, failedRecords);
         }
       }
     }
@@ -137,7 +143,7 @@ const handleDeleteRecords = async (records) => {
   }
   
   return {
-    type: "DELETE",
+    type: operationTypes.DELETE,
     failedRecords: failedRecords,
     successRecords: successRecords,
   };

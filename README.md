@@ -12,3 +12,8 @@ yarn start
 
 <!-- dev -->
 yarn dev (for development purpose using nodemon)
+
+# Request and Response types
+Check out notes folder.
+schema-helper: contains notes on type of request object and response object
+test-record: contains sample request object to send in API body

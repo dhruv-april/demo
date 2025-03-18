@@ -1,5 +1,10 @@
 const { v4: uuidv4 } = require('uuid');
-const { createRecordSchema, updateRecordSchema, deleteRecordSchema } = require('../utils/schema');
+const { 
+  createRecordSchema, 
+  updateRecordSchema, 
+  deleteRecordSchema 
+} = require('../utils/schema');
+const { errorHelper } = require('../utils/helper');
 
 // imitating db records
 const dbRecords = [];

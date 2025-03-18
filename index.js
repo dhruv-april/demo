@@ -1,9 +1,13 @@
 const express = require('express');
 
 const recordsRoute = require('./routes/record');
+const connectDB = require('./db/db_connection');
 
 const app = express();
 const PORT = 3000;
+
+// connect to MongoDB
+connectDB();
 
 app.use(express.json());
 

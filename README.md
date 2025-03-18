@@ -8,7 +8,7 @@ mongodb
 
 ### How to run
 yarn install\
-yarn start\
+yarn start
 
 <!-- dev -->
 yarn dev (for development purpose using nodemon)

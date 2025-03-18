@@ -1,3 +1,4 @@
+const { isValidObjectId } = require('mongoose');
 const { 
   createRecordSchema, 
   updateRecordSchema, 
@@ -89,15 +90,21 @@ const handleUpdateRecords = async (records) => {
       } else {
         const recordId = record['id'];
         delete record['id'];
-        // check if record exist into db to update it
-        const updatedRecord = await Record.findByIdAndUpdate(recordId, record, {
-          new: true,
-          runValidators: true
-        });
+
+        let updatedRecord = null;
+        // check if it is valid ObjectId
+        if(isValidObjectId(recordId)) {
+          // find record and update it
+          updatedRecord = await Record.findByIdAndUpdate(recordId, record, {
+            new: true,
+            runValidators: true
+          });
+        }
+        
         if(updatedRecord) {
           successRecords.push({ id: recordId });
         }
-        // if not then add errorMessage with id into failedRecords
+        // if unable to find and update then add errorMessage with id into failedRecords
         else {
           const errorMessage = 'Record does not exist to update.';
           errorHelper(errorMessage, recordId, operationTypes.UPDATE, failedRecords);
@@ -126,12 +133,17 @@ const handleDeleteRecords = async (records) => {
       if(error) {
         errorHelper(error.details[0].message, record['id'], operationTypes.DELETE, failedRecords);
       } else {
-        // check if record exist into db to delete it
-        const deletedRecord = await Record.findByIdAndDelete(record['id']);
+        let deletedRecord = null;
+        // check if it is valid ObjectId
+        if(isValidObjectId(record['id'])) {
+          // find record and delete it
+          deletedRecord = await Record.findByIdAndDelete(record['id']);
+        }
+
         if(deletedRecord) {
           successRecords.push({ id: record['id'] });
         }
-        // if not then add errorMessage with id into failedRecords
+        // if unable to find and delete then add errorMessage with id into failedRecords
         else {        
           const errorMessage = 'Record does not exist to delete.';
           errorHelper(errorMessage, record['id'], operationTypes.DELETE, failedRecords);

@@ -21,22 +21,22 @@ const handleGetRecords = async (req, res) => {
 const handlePostRecords = async (req, res) => {
   const objects = req.body;
   
-  let results = [];
+  let result = [];
 
   if(objects && objects.length > 0) {
     for(let obj of objects) {
       switch(obj['type']) {
         case operationTypes.CREATE:
           const createResult = await handleCreateRecords(obj['records']);
-          results.push(createResult);
+          result.push(createResult);
           break;
         case operationTypes.UPDATE:
           const updateResult = await handleUpdateRecords(obj['records']);
-          results.push(updateResult);
+          result.push(updateResult);
           break;
         case operationTypes.DELETE:
           const deleteResult = await handleDeleteRecords(obj['records']);
-          results.push(deleteResult);
+          result.push(deleteResult);
           break;
         default:
           console.log(`${obj['type']} operation not supported!`);
@@ -46,7 +46,7 @@ const handlePostRecords = async (req, res) => {
     res.status(400).json({ message: "Please send valid request body!" });
   }
 
-  res.status(200).json({ results });
+  res.status(200).json({ result });
 }
 
 const handleCreateRecords = async (records) => {

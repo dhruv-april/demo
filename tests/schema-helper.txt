@@ -1,0 +1,53 @@
+Record Schema:
+
+title and type
+
+color: string (hex code format)
+name: string
+length: float (cm)
+height: float (cm)
+weight: float (cm)
+quantity: integer
+stackable: boolean
+tiltable: boolean
+
+id: string (back-end generated)
+
+-------------------------------------
+
+Request Schema:
+[
+    {
+        type: "CREATE",
+        records: [record schema except id],
+    },
+    {
+        type: "UPDATE",
+        records: [record schema with valid id],
+    },
+    {
+        type: "DELETE",
+        records: [valid record id],
+    }
+]
+
+--------------------------------------
+
+Response Schema:
+[
+    {
+        type: "CREATE",
+        failedRecords: [],
+        successRecords: [],
+    },
+    {
+        type: "UPDATE",
+        failedRecords: [],
+        successRecords: [],
+    },
+    {
+        type: "DELETE",
+        failedRecords: [],
+        successRecords: [],
+    }
+]

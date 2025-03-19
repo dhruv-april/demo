@@ -1,62 +1,79 @@
-[
-    {
-        "type": "CREATE",
-        "records": [
-            {
-                "color": "#FFF",
-                "name": "Test1",
-                "length": 10,
-                "height": 10,
-                "weight": 100,
-                "quantity": 5,
-                "stackable": true,
-                "tiltable": false
-            },
-            {
-                "color": "#000",
-                "name": "Test2",
-                "length": 20,
-                "height": 30,
-                "weight": 400,
-                "quantity": 10,
-                "stackable": false,
-                "tiltable": false
-            }
-        ]
-    }, 
-    {
-        "type": "UPDATE",
-        "records": [
-            {
-                "id": "1",
-                "color": "#FFF",
-                "name": "Test1",
-                "length": 10,
-                "height": 10,
-                "weight": 100,
-                "quantity": 5,
-                "stackable": true,
-                "tiltable": false
-            },
-            {
-                "id": "2",
-                "color": "#000",
-                "name": "Test2",
-                "length": 20,
-                "height": 30,
-                "weight": 400,
-                "quantity": 10,
-                "stackable": false,
-                "tiltable": false
-            }
-        ]
-    },
-    {
-        "type": "DELETE",
-        "records": [
-            { "id": "1" },
-            { "id": "2" },
-            { "id": "3" },
-        ]
-    }
-]
+# Example 1: two records created that are duplicate of deleted records (all fields are same fields except id)
+{
+    "CREATE": [
+        {
+            "color": "#FFF",
+            "name": "Test1",
+            "length": 10,
+            "height": 10,
+            "weight": 100,
+            "quantity": 5,
+            "stackable": true,
+            "tiltable": false
+        },
+        {
+            "color": "#FFF",
+            "name": "Test2",
+            "length": 20,
+            "height": 20,
+            "weight": 200,
+            "quantity": 25,
+            "stackable": true,
+            "tiltable": false
+        }
+    ],
+    "DELETE": [
+        {
+            "id": "67da84799804268f0ec30850",
+            "color": "#FFF",
+            "name": "Test1",
+            "length": 10,
+            "height": 10,
+            "weight": 100,
+            "quantity": 5,
+            "stackable": true,
+            "tiltable": false
+        },
+        {
+            "id": "67da84799804268f0ec30851",
+            "color": "#FFF",
+            "name": "Test2",
+            "length": 20,
+            "height": 20,
+            "weight": 200,
+            "quantity": 25,
+            "stackable": true,
+            "tiltable": false
+        }
+    ]
+}
+
+# Example 2: the record updated is going to be deleted (same id)
+{
+    "UPDATE": [
+        {
+            "id": "67da832de697872b0a667295",
+            "color": "#FFF",
+            "name": "Test5",
+            "length": 20,
+            "height": 20,
+            "weight": 200,
+            "quantity": 25,
+            "stackable": true,
+            "tiltable": false
+        }
+    ],
+    "DELETE": [
+        {
+            "id": "67da832de697872b0a667295",
+            "color": "#FFF",
+            "name": "Test5",
+            "length": 20,
+            "height": 20,
+            "weight": 200,
+            "quantity": 25,
+            "stackable": true,
+            "tiltable": false
+        }
+    ]
+}

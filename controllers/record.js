@@ -4,7 +4,7 @@ const {
   updateRecordSchema, 
   deleteRecordSchema 
 } = require('../utils/schema');
-const { errorHelper } = require('../utils/helper');
+const { errorHelper, filterRecordsHelper } = require('../utils/helper');
 const { operationTypes } = require('../utils/constants');
 const Record = require('../models/record');
 
@@ -19,32 +19,27 @@ const handleGetRecords = async (req, res) => {
 }
 
 const handlePostRecords = async (req, res) => {
-  const objects = req.body;
+  /* object: {
+    'CREATE': [], records without id
+    'UPDATE': [], records with id
+    'DELETE': [], records with id
+  } */
+  const object = req.body;
   
   let result = [];
 
-  if(objects && objects.length > 0) {
-    for(let obj of objects) {
-      switch(obj['type']) {
-        case operationTypes.CREATE:
-          const createResult = await handleCreateRecords(obj['records']);
-          result.push(createResult);
-          break;
-        case operationTypes.UPDATE:
-          const updateResult = await handleUpdateRecords(obj['records']);
-          result.push(updateResult);
-          break;
-        case operationTypes.DELETE:
-          const deleteResult = await handleDeleteRecords(obj['records']);
-          result.push(deleteResult);
-          break;
-        default:
-          console.log(`${obj['type']} operation not supported!`);
-      }
-    }
-  } else {
-    res.status(400).json({ message: "Please send valid request body!" });
-  }
+  // filter out records for duplicate operations
+  // so that front-end don't have to manage complex state-management
+  const updatedObject = filterRecordsHelper(object);
+
+  const createResult = await handleCreateRecords(updatedObject[operationTypes.CREATE]);
+  result.push(createResult);
+
+  const updateResult = await handleUpdateRecords(updatedObject[operationTypes.UPDATE]);
+  result.push(updateResult);
+
+  const deleteResult = await handleDeleteRecords(updatedObject[operationTypes.DELETE]);
+  result.push(deleteResult);
 
   res.status(200).json({ result });
 }

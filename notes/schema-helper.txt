@@ -16,20 +16,12 @@ id: string (back-end generated)
 -------------------------------------
 
 Request Schema:
-[
-    {
-        type: "CREATE",
-        records: [record schema except id],
-    },
-    {
-        type: "UPDATE",
-        records: [record schema with valid id],
-    },
-    {
-        type: "DELETE",
-        records: [valid record id],
-    }
-]
+
+{
+    "CREATE": [record schema except id],
+    "UPDATE": [record schema with valid id],
+    "DELETE": [record schema with valid id]
+}
 
 --------------------------------------
 
